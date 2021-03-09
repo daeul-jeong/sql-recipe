@@ -21,7 +21,9 @@ SELECT url_extract_host(td_url), url_extract_path(td_url), url_extract_query(td_
 ```
 - 참고 : https://prestodb.io/docs/current/functions/url.html
 3. 문자열을 배열로 분해하기
-
+```
+select url_extract_path(td_url), SPLIT(url_extract_path(td_url), '/')[1] AS PATH1, SPLIT(url_extract_path(td_url), '/')[2] AS PATH2, SPLIT(url_extract_path(td_url), '/')[3] AS PATH2 from web_clicks group by 1,2,3 limit 10 ; 
+```
 7. 날짜와 타임스탬프 다루기
 8. 결손 값을 디폴트 값으로 대치하기
 9. 
