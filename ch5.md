@@ -26,7 +26,10 @@ select url_extract_path(td_url), SPLIT(url_extract_path(td_url), '/')[1] AS PATH
 ```
 7. 날짜와 타임스탬프 다루기
 ```
-select current_date, current_time, current_timestamp, current_timezone() ;
+select current_date, current_time, current_timestamp, localtime, localtimestamp, current_timezone() ;
+```
+```
+select date('2021-03-09') as date, '2021-03-09' as str;
 ```
 9. 결손 값을 디폴트 값으로 대치하기
 10. 
