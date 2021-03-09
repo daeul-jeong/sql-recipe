@@ -24,12 +24,18 @@ SELECT url_extract_host(td_url), url_extract_path(td_url), url_extract_query(td_
 ```
 select url_extract_path(td_url), SPLIT(url_extract_path(td_url), '/')[1] AS PATH1, SPLIT(url_extract_path(td_url), '/')[2] AS PATH2, SPLIT(url_extract_path(td_url), '/')[3] AS PATH2 from web_clicks group by 1,2,3 limit 10 ; 
 ```
-7. 날짜와 타임스탬프 다루기
+4. 날짜와 타임스탬프 다루기
 ```
 select current_date, current_time, current_timestamp, localtime, localtimestamp, current_timezone() ;
 ```
+- 문자열을 날짜로 convert
 ```
 select date('2021-03-09') as date, '2021-03-09' as str;
 ```
-9. 결손 값을 디폴트 값으로 대치하기
-10. 
+- 특정 필드 추출
+```
+SELECT timestamp '2012-10-31 01:35:00 UTC' AT TIME ZONE 'Asia/Seoul', hour(timestamp '2012-10-31 01:35:00 UTC' AT TIME ZONE 'Asia/Seoul');
+```
+
+5. 결손 값을 디폴트 값으로 대치하기
+
