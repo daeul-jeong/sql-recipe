@@ -38,4 +38,7 @@ SELECT timestamp '2012-10-31 01:35:00 UTC' AT TIME ZONE 'Asia/Seoul', hour(times
 ```
 
 5. 결손 값을 디폴트 값으로 대치하기
+```
+SELECT COALESCE(money, 0) as money;
+```
 
