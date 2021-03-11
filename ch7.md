@@ -61,4 +61,51 @@ select
    - UNBOUNDED PRECEDING(이전 행 전부)
    - UNBOUNDED FOLLOWING(이후 행 전부) 
 
+```
+select 
+-- 가장 앞 순위부터 가장 뒷 순위까지 범위를 대상으로 상품 ID 집약
+ array_agg(product_id) OVER(ORDER BY score DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING),
+ -- 가장 앞 순위부터 현재 순위까지 범위를 대상으로 상품 ID 집약
+ array_agg(product_id) OVER(ORDER BY SCREO DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW),
+ -- 순위 하나 앞과 하나 뒤까지의 범위를 대상으로 상품 ID 집약
+ array_agg(product_id) OVER(ORDER BY SCORE DESC ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING)
+ 
+```
+
+- PARTITION BY 와 ORDER BY 조합하기
+
+```
+select 
+ category,
+ product_id,
+ score,
+ -- 카테고리별로 점수 순서로 정렬하고 유일한 순위를 붙임
+ ROW_NUMBER() OVER(PARTITION BY category ORDER BY score DESC) as row
+```
+
+- 각 카테고리의 상위 n개 추출하기
+```
+select * from 
+-- 서브쿼리로 순위 계산
+ (
+  select 
+   category,
+   product_id,
+   score,
+   row_number() over(partition by category order by score desc) as rank from products
+ ) as rank_products
+ where rank <-2
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
