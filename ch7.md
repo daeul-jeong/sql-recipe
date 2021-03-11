@@ -1,2 +1,64 @@
 # 하나의 테이블에 대한 조작
 ## 데이터 집약
+- 집약 함수 : 여러개의 레코드를 기반으로 하나의 값을 리턴하는 함수
+- ex ) sum, count
+## 데이터 가공
+
+1. 그룹의 특징 잡기
+```
+SELECT
+ user_id,
+ count(*) as total_count,
+ count(distince product_id),
+ sum(score),
+ max(score),
+ min(score)
+from
+ review
+ group by user_id
+```
+- group by 구문에서는 지정한 컬럼을 유니크 키로 새로운 테이블이 만들어짐
+
+```
+select
+ user_id,
+ score,
+ avg(score) over() as 전체 평균 리뷰 점수,
+ avg(score) over(partition by user_id) as 사용자 평균 리뷰 점수
+```
+- 집약함수(sum, count, avg.. 등등) 뒤에 OVER()를 붙이면 테이블 전체 적용
+- OVER(partition by 컬럼명) 하면 컬럼 기준으로 그룹화하여 집약함수를 적용
+
+```
+select
+ product_id,
+ score,
+ ROW_NUMBER() OVER(ORDER BY score DESC) as row,
+ RANK() OVER(ORDER BY score DESC) as rank,
+ LAG(product_id) OVER(ORDER BY score DESC), -- score 순으로 정렬 후 앞에 있는 값 조회
+ LEAD(product_id) OVER(ORDER BY score DESC) -- score 순으로 정렬 후 뒤에 있는 값 조회
+```
+
+```
+select 
+-- 순위 상위부터의 누계 점수 계산
+ SUM(score) OVER(ORDER BY score DESC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum_score ,
+ -- 현재 행과 앞 뒤의 행이 가진 값으로 평균 구하기
+ AVG(score) OVER(ORDER BY score DESC ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING),
+ -- 순위가 높은 상품 ID 추출
+ FIRST_VALUE(product_id) OVER(ORDER BY score DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING),
+ -- 순위가 낮은 상품 ID 추출
+ LAST_VALUE(product_id) OVER(ORDER BY SCORE DESC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING)
+ 
+```
+
+- 프레임 지정 구문
+ - `ROWS BETWEEN start AND end`
+  - start와 end에 들어갈 수 있는 값
+   - CURRENT ROW(현재의 행)
+   - n PRECEDING(n행 앞)
+   - n FOLLOWING(n행 뒤)
+   - UNBOUNDED PRECEDING(이전 행 전부)
+   - UNBOUNDED FOLLOWING(이후 행 전부) 
+
+
