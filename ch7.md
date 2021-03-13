@@ -98,6 +98,33 @@ select * from
 ```
 
 
+3. 세로 기반 데이터를 가로 기반으로 변환하기
+dt    | indicator   | value
+01-01 | impressions | 1800
+01-01 | sessions   | 50
+01-01 | users       | 200
+01-02 | impressions | 1800
+01-02 | sessions   | 50
+01-02 | users       | 200
+
+```
+select
+ dt,
+ max(case when indicator = 'impressions' then value end) as impressions,
+ max(case when indicator = 'sessions' then value end) as sessions,
+ max(case when indicator = 'users' then value end) as users
+```
+
+```
+-- 상품 ID를 배열에 집약하고 쉼표로 구분된 문자열로 변환하기
+select 
+ purhcase_id,
+ string_agg(product_id, ',') as products_ids
+```
+> A001, A002, A003 이렇게 쉼표로 한칸에 나옴.
+
+
+
 
 
 
